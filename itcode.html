@@ -1,0 +1,160 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>인공지능 기초 과세특 Tkinter 파이썬 코드</title><style>body{font-family:'Malgun Gothic',sans-serif;background:#f1f5fa;color:#20314a;margin:0;line-height:1.6}header{background:#193b66;color:white;padding:30px 5%}main{max-width:1150px;margin:25px auto;padding:0 16px}section{background:white;border:1px solid #d9e3f0;border-radius:14px;padding:22px;margin-bottom:18px}h1,h2{margin-top:0}button,a.btn{background:#235b93;color:white;border:0;padding:10px 17px;border-radius:8px;cursor:pointer;text-decoration:none;display:inline-block;font:inherit;margin:4px}pre{background:#0d1b2a;color:#e8f0ff;padding:20px;border-radius:10px;white-space:pre;overflow:auto;font:14px/1.6 Consolas,'Malgun Gothic',monospace;max-height:75vh}.muted{color:#596b81}</style></head><body><header><h1>인공지능 기초 과세특 문장 조합기</h1><p>시작 20개 · 본문 20개 · 마무리 20개 · Tkinter 드롭다운 4개</p></header><main><section><h2>실행 안내</h2><p>아래 파이썬 파일을 내려받아 Windows의 Python IDLE에서 실행하세요. <b>본문 ①과 본문 ②의 번호가 같으면 경고창이 뜨며 생성되지 않습니다.</b></p><p>문장 생성 · 결과 복사 · TXT 저장 · 초기화 기능을 포함합니다. 생성된 문장은 편집할 수 있으며 글자 수도 표시됩니다.</p><a class="btn" href="인공지능기초_과세특_Tkinter.py" download>파이썬 파일 내려받기</a><button onclick="copyCode()">전체 코드 복사</button><span id="msg" class="muted"></span></section><section><h2>파이썬 전체 코드</h2><pre id="code"># -*- coding: utf-8 -*-
+&quot;&quot;&quot;인공지능 기초 과세특 문장 조합기 (Tkinter, 표준 라이브러리만 사용)&quot;&quot;&quot;
+import tkinter as tk
+from tkinter import ttk, messagebox, filedialog
+from datetime import datetime
+
+시작_멘트 = {
+    1: &#x27;인공지능의 개념과 발전 과정에 관심을 가지고 일상생활 속 활용 사례를 조사하며 기술의 원리를 탐구함.&#x27;,
+    2: &#x27;인간의 지능과 인공지능의 문제 해결 방식을 비교하며 두 방식의 차이를 논리적으로 분석함.&#x27;,
+    3: &#x27;생활 속 지능형 서비스를 관찰하고 입력 정보와 처리 결과의 관계를 탐색하는 태도를 보임.&#x27;,
+    4: &#x27;인공지능 기술의 역사적 발전 과정을 조사하고 시대별 기술 변화의 의미를 정리함.&#x27;,
+    5: &#x27;지능 에이전트의 환경 인식과 행동 선택 원리를 중심으로 작동 과정을 탐구함.&#x27;,
+    6: &#x27;학습 자료가 인공지능의 성능에 미치는 영향을 질문으로 설정하고 데이터의 역할을 분석함.&#x27;,
+    7: &#x27;지도학습과 비지도학습의 차이를 비교하며 문제에 적합한 학습 방법을 탐색함.&#x27;,
+    8: &#x27;인공지능 모형의 예측 결과에 관심을 가지고 학습과 평가 과정을 체계적으로 살펴봄.&#x27;,
+    9: &#x27;다양한 자료에서 규칙을 발견하는 학습 원리를 이해하고 분류와 예측 문제를 탐구함.&#x27;,
+    10: &#x27;자료의 양과 품질에 따른 학습 성능 변화를 관찰하고 검증 가능한 탐구 질문을 설정함.&#x27;,
+    11: &#x27;인공지능 기술의 사회적 영향을 다각도로 살펴보며 책임 있는 활용의 필요성을 인식함.&#x27;,
+    12: &#x27;인공지능의 편향과 공정성 문제에 관심을 가지고 판단 결과의 차이를 분석함.&#x27;,
+    13: &#x27;개인정보 보호와 인공지능 활용 사이의 균형을 주제로 윤리적 쟁점을 탐구함.&#x27;,
+    14: &#x27;인공지능의 자동화가 직업과 사회에 미치는 변화를 다양한 사례를 통해 조사함.&#x27;,
+    15: &#x27;인공지능 생성 정보의 신뢰성을 검토하며 인간의 확인과 판단이 필요한 이유를 탐구함.&#x27;,
+    16: &#x27;생활 속 문제를 인공지능으로 해결할 수 있는 가능성을 발견하고 탐구 목표를 구체화함.&#x27;,
+    17: &#x27;실생활 문제를 인공지능 학습 과제로 전환하며 필요한 자료와 평가 기준을 분석함.&#x27;,
+    18: &#x27;인공지능 프로젝트의 단계별 수행 과정을 계획하고 자료 준비와 구현 절차를 탐색함.&#x27;,
+    19: &#x27;협력적 인공지능 프로젝트에서 공동 목표를 설정하고 해결 방안을 비교하며 참여함.&#x27;,
+    20: &#x27;인공지능을 활용한 문제 해결 활동에서 결과의 정확성과 활용 가능성을 함께 검토함.&#x27;,
+}
+
+본문_멘트 = {
+    1: &#x27;규칙 기반 시스템과 학습 기반 시스템의 차이를 조사하고 입력 정보, 처리 과정, 출력 결과를 연결하여 분석함. 여러 활용 사례의 작동 원리를 비교하고 각 방식의 장점과 한계를 정리함. 탐구 내용을 개념도로 구조화하여 데이터와 알고리즘이 수행하는 역할을 설명함.&#x27;,
+    2: &#x27;자율주행 상황을 가정하고 지능 에이전트가 감지 정보에 따라 행동을 선택하는 절차를 분석함. 장애물과 신호 변화에 대한 대응 규칙을 정리하고 예외 상황에서 발생하는 문제를 검토함. 환경 변화에 대응하기 위한 개선 방안을 제시함.&#x27;,
+    3: &#x27;의료 영상 분석과 질병 위험 예측 사례를 조사하고 학습 자료의 특성과 판단 결과 사이의 관계를 비교함. 잘못된 예측이 초래할 수 있는 문제를 분석하고 전문가의 최종 판단이 필요한 이유를 설명함. 안전한 활용 조건을 정리함.&#x27;,
+    4: &#x27;추천 서비스에서 사용자 기록과 선호 정보가 결과에 반영되는 과정을 분석함. 특정 정보가 반복적으로 추천되는 원인을 조사하고 추천의 다양성과 정확성 사이의 관계를 비교함. 이용자의 선택권을 존중하는 개선 방향을 제안함.&#x27;,
+    5: &#x27;지능형 대화 시스템에 표현이 다른 질문을 입력하고 응답 결과를 비교함. 문맥 변화에 따른 응답 차이와 사실과 다른 정보가 생성되는 사례를 분석함. 출처 확인과 교차 검증 절차를 제안하고 신뢰성 있는 활용 방법을 정리함.&#x27;,
+    6: &#x27;손글씨 숫자 분류를 주제로 학습 자료와 평가 자료를 구분하여 실험함. 자료의 양과 구성에 따라 분류 결과가 어떻게 달라지는지 비교하고 잘못 분류된 사례의 형태적 특징을 분석함. 학습 자료를 보완하여 성능을 개선할 방법을 제안함.&#x27;,
+    7: &#x27;꽃의 길이와 너비를 이용하여 품종을 분류하는 지도학습 활동을 수행함. 입력 변수를 선정하고 학습 모형의 예측 결과를 실제 품종과 비교함. 잘못 분류된 사례를 분석하여 변수 선택의 중요성과 성능 평가의 필요성을 설명함.&#x27;,
+    8: &#x27;주택 면적과 건축 연도 등의 자료로 가격을 예측하는 과정을 탐구함. 결측값과 이상값 처리 방법을 비교하고 예측값과 실제값의 차이를 계산함. 오차가 큰 사례의 특징을 분석하여 입력 변수의 적절성과 예측 모형의 한계를 설명함.&#x27;,
+    9: &#x27;정답 정보가 없는 자료를 유사성에 따라 묶는 군집화 활동을 수행함. 변수의 크기 차이가 거리 계산에 미치는 영향을 살펴보고 군집 개수를 바꾸어 결과를 시각화함. 각 집단의 공통 특징을 해석하고 군집 구분의 적절성을 검토함.&#x27;,
+    10: &#x27;학습 자료와 새로운 평가 자료에서 나타나는 성능 차이를 비교하여 과적합 현상을 탐구함. 모형의 복잡도와 학습 조건을 변경하면서 결과를 기록하고 표와 그래프로 분석함. 일반화 성능을 높이기 위한 조건을 근거와 함께 제안함.&#x27;,
+    11: &#x27;채용 평가에 인공지능을 활용할 때 발생할 수 있는 편향을 사례 중심으로 분석함. 학습 자료의 대표성과 평가 기준이 결과에 미치는 영향을 검토함. 불공정한 판단을 줄이기 위한 자료 점검과 인간의 감독 절차를 제안함.&#x27;,
+    12: &#x27;얼굴 인식 기술의 정보 수집, 저장, 활용 과정을 조사함. 출입 관리의 편리함과 사생활 침해 위험을 비교하고 동의 없는 정보 활용의 문제를 분석함. 개인정보 최소 수집과 안전한 관리의 필요성을 근거를 들어 설명함.&#x27;,
+    13: &#x27;인공지능 생성 이미지와 문장의 신뢰성을 판단하는 기준을 탐색함. 실제 자료와 생성 자료를 비교하고 출처가 불명확한 정보의 확산 문제를 조사함. 사실 확인, 출처 표시, 저작권 존중을 포함한 활용 원칙을 제안함.&#x27;,
+    14: &#x27;인공지능 자동화가 직업 세계에 미치는 영향을 조사함. 반복 업무와 창의적 판단이 필요한 업무를 구분하고 인간과 인공지능의 협력 사례를 비교함. 미래 사회에서 요구되는 역량과 지속적인 학습의 필요성을 정리함.&#x27;,
+    15: &#x27;자동화된 의사결정이 잘못된 결과를 낳는 사례를 조사하고 개발자, 운영자, 이용자의 역할을 분석함. 판단 과정의 설명 가능성과 결과 검증 절차를 검토함. 중요한 결정에서 인간의 감독이 필요한 조건을 제시함.&#x27;,
+    16: &#x27;재활용품 이미지 분류 프로젝트를 계획하고 종류별 사진을 수집하여 학습 자료를 구성함. 다양한 조명과 촬영 각도에서 분류 결과를 확인하고 오류 원인을 분석함. 자료를 추가하여 성능 개선을 시도하고 분리배출 안내 방안을 제안함.&#x27;,
+    17: &#x27;학습 시간과 과제 수행 기록을 활용한 학습 유형 분석 프로젝트를 설계함. 개인정보 보호를 고려하여 자료를 정리하고 유형별 추천 기준을 설정함. 추천 결과의 적절성을 사례로 검증하고 편향을 줄이기 위한 개선 방안을 탐색함.&#x27;,
+    18: &#x27;기온, 습도, 기압 자료를 활용하여 강수 여부를 예측하는 모형을 구성함. 결측값을 점검하고 입력 변수를 선정한 뒤 실제 관측값과 예측 결과를 비교함. 오차 유형을 분석하고 조건을 바꾸어 성능 변화를 확인함.&#x27;,
+    19: &#x27;식물 잎의 정상 상태와 이상 증상을 구별하는 이미지 분류 프로젝트를 수행함. 촬영 조건과 자료의 균형을 고려하여 학습 자료를 준비함. 배경과 조명에 따른 분류 오류를 분석하고 자료 보완을 통한 개선 방안을 제시함.&#x27;,
+    20: &#x27;시간대별 전력 사용량을 정리하여 에너지 소비량 예측 프로젝트를 수행함. 기온과 사용 시간의 영향을 분석하고 예측값과 실제값의 차이를 비교함. 오차가 큰 시간대의 특징을 조사하고 에너지 절약을 위한 실천 방안을 제안함.&#x27;,
+}
+
+마무리_멘트 = {
+    1: &#x27;인공지능의 원리를 실생활과 연결하여 설명하고 새로운 문제에 적용하는 능력이 돋보임. 기술의 작동 과정을 논리적으로 분석하며 창의적 사고력과 자기주도적 탐구 역량을 발전시킴.&#x27;,
+    2: &#x27;지능 에이전트의 환경 인식과 의사결정 과정을 체계적으로 이해함. 탐구 과정에서 발견한 의문을 새로운 학습 주제로 확장하며 분석적 사고력과 학문적 호기심을 발휘함.&#x27;,
+    3: &#x27;인간의 사고와 인공지능의 정보 처리 방식을 비교하여 가능성과 한계를 균형 있게 이해함. 새로운 관점에서 문제를 해석하는 능동적이고 성찰적인 태도가 돋보임.&#x27;,
+    4: &#x27;인공지능 기술의 발전과 사회적 변화를 연결하여 해석함. 기술적 현상에 대한 질문을 스스로 만들고 근거를 바탕으로 답을 탐색하며 융합적 사고 역량을 발전시킴.&#x27;,
+    5: &#x27;지능형 시스템의 구성 요소와 상호작용을 체계적으로 설명함. 학습한 개념을 새로운 사례에 적용하고 다양한 해결 가능성을 탐색하는 창의적인 태도를 보여 줌.&#x27;,
+    6: &#x27;학습 자료의 특성과 모형의 성능 사이의 관계를 분석함. 실험 결과를 객관적으로 비교하고 개선 근거를 제시하며 데이터 기반 문제 해결 역량을 발전시킴.&#x27;,
+    7: &#x27;지도학습과 비지도학습의 특징을 비교하고 적절한 방법을 선정함. 예측 오류의 원인을 분석하며 합리적 의사결정 능력과 자기주도적 탐구 역량을 보여 줌.&#x27;,
+    8: &#x27;학습 모형의 구현과 평가 과정을 체계적으로 수행함. 다양한 실험 조건을 비교하여 결과의 신뢰성을 검토하고 분석을 근거로 개선 방안을 도출하는 능력이 돋보임.&#x27;,
+    9: &#x27;자료의 수집과 전처리가 학습 결과에 미치는 영향을 이해함. 오류 원인을 탐색하고 가설을 검증하는 과정에서 논리적 사고력과 실험 설계 능력을 발전시킴.&#x27;,
+    10: &#x27;분류와 예측 결과를 비판적으로 해석하고 학습 모형의 한계를 평가함. 결과의 정확성과 학습 과정의 타당성을 함께 검토하는 문제 해결 역량을 보여 줌.&#x27;,
+    11: &#x27;인공지능의 사회적 영향과 윤리적 쟁점을 다양한 관점에서 분석함. 공정성과 개인정보 보호를 함께 고려하며 책임 있는 기술 활용 태도를 보여 줌.&#x27;,
+    12: &#x27;인공지능 판단의 편향과 차별 문제를 비판적으로 검토함. 기술적 효율성과 사회적 공정성을 함께 분석하고 합리적인 개선 방향을 제시하는 능력이 돋보임.&#x27;,
+    13: &#x27;인공지능 활용 과정에서 개인정보 보호와 정보의 신뢰성을 중시함. 편리함과 위험을 균형 있게 검토하며 책임 있는 디지털 시민의 역량을 보여 줌.&#x27;,
+    14: &#x27;인공지능이 미래 사회와 직업 세계에 미치는 변화를 폭넓게 이해함. 인간과 기술의 협력 가능성을 탐색하고 지속 가능한 활용 방향을 모색하는 태도가 돋보임.&#x27;,
+    15: &#x27;인공지능의 판단 근거와 책임 소재를 비판적으로 검토함. 기술의 한계를 인식하고 인간의 존엄성과 공동체의 가치를 존중하는 윤리적 성찰 역량을 보여 줌.&#x27;,
+    16: &#x27;실생활 문제 해결 과정에서 창의적 발상과 체계적 실행 능력을 발휘함. 탐구 결과를 검증하고 발견한 한계를 개선 과제로 연결하며 자기주도적 역량을 발전시킴.&#x27;,
+    17: &#x27;프로젝트의 목표 설정부터 구현과 평가까지 체계적으로 수행함. 예상하지 못한 문제에도 여러 해결 방법을 탐색하고 반복적으로 개선하는 도전적인 태도가 돋보임.&#x27;,
+    18: &#x27;학습 결과를 바탕으로 해결 방안의 실효성을 검토하고 활용 가능성을 탐색함. 탐구 경험을 후속 연구로 확장하며 창의적이고 융합적인 사고 역량을 발전시킴.&#x27;,
+    19: &#x27;협력적 프로젝트에서 구성원의 의견을 존중하고 해결 방안을 조율함. 공동 목표를 위해 맡은 역할을 책임감 있게 수행하며 협업과 의사소통 역량을 발전시킴.&#x27;,
+    20: &#x27;프로젝트 오류의 원인을 분석하고 해결 과정을 반복적으로 개선함. 성과와 한계를 성찰하고 새로운 문제에 도전하는 지속적인 성장 가능성을 보여 줌.&#x27;,
+}
+
+
+class 과세특_조합기:
+    def __init__(self, 창):
+        self.창 = 창
+        창.title(&quot;인공지능 기초 과세특 문장 조합기&quot;)
+        창.geometry(&quot;1050x740&quot;)
+        창.minsize(760, 550)
+        바탕 = ttk.Frame(창, padding=18)
+        바탕.pack(fill=&quot;both&quot;, expand=True)
+        ttk.Label(바탕, text=&quot;인공지능 기초 · 과세특 600자 조합기&quot;, font=(&quot;맑은 고딕&quot;, 18, &quot;bold&quot;)).pack(anchor=&quot;w&quot;, pady=(0, 8))
+        ttk.Label(바탕, text=&quot;시작 1개 + 본문 2개(서로 다른 번호) + 마무리 1개를 선택하세요.&quot;).pack(anchor=&quot;w&quot;, pady=(0, 12))
+        선택틀 = ttk.LabelFrame(바탕, text=&quot;문장 선택&quot;, padding=12)
+        선택틀.pack(fill=&quot;x&quot;)
+        self.선택값 = {}
+        구성 = [(&quot;시작&quot;, 시작_멘트), (&quot;본문 ①&quot;, 본문_멘트), (&quot;본문 ②&quot;, 본문_멘트), (&quot;마무리&quot;, 마무리_멘트)]
+        for 행, (이름, 사전) in enumerate(구성):
+            ttk.Label(선택틀, text=이름, width=10).grid(row=행, column=0, sticky=&quot;w&quot;, pady=5)
+            값 = tk.StringVar()
+            콤보 = ttk.Combobox(선택틀, textvariable=값, state=&quot;readonly&quot;, width=100,
+                values=[f&quot;{번호:02d}. {문장[:48]}...&quot; for 번호, 문장 in 사전.items()])
+            콤보.grid(row=행, column=1, sticky=&quot;ew&quot;, padx=6, pady=5)
+            콤보.current(행 if 행 &lt; 2 else (1 if 행 == 2 else 0))
+            self.선택값[이름] = 값
+        선택틀.columnconfigure(1, weight=1)
+        단추틀 = ttk.Frame(바탕)
+        단추틀.pack(fill=&quot;x&quot;, pady=12)
+        ttk.Button(단추틀, text=&quot;문장 생성&quot;, command=self.생성).pack(side=&quot;left&quot;, padx=(0, 8))
+        ttk.Button(단추틀, text=&quot;결과 복사&quot;, command=self.복사).pack(side=&quot;left&quot;, padx=(0, 8))
+        ttk.Button(단추틀, text=&quot;TXT 저장&quot;, command=self.저장).pack(side=&quot;left&quot;, padx=(0, 8))
+        ttk.Button(단추틀, text=&quot;초기화&quot;, command=self.초기화).pack(side=&quot;left&quot;)
+        self.상태 = ttk.Label(바탕, text=&quot;문장 생성 단추를 누르세요.&quot;)
+        self.상태.pack(anchor=&quot;w&quot;, pady=(0, 6))
+        결과틀 = ttk.LabelFrame(바탕, text=&quot;과세특 결과 (수정 가능)&quot;, padding=8)
+        결과틀.pack(fill=&quot;both&quot;, expand=True)
+        self.결과 = tk.Text(결과틀, wrap=&quot;word&quot;, font=(&quot;맑은 고딕&quot;, 12), undo=True, spacing2=5)
+        막대 = ttk.Scrollbar(결과틀, orient=&quot;vertical&quot;, command=self.결과.yview)
+        self.결과.configure(yscrollcommand=막대.set)
+        self.결과.pack(side=&quot;left&quot;, fill=&quot;both&quot;, expand=True)
+        막대.pack(side=&quot;right&quot;, fill=&quot;y&quot;)
+
+    def 번호(self, 이름):
+        return int(self.선택값[이름].get().split(&quot;.&quot;, 1)[0])
+
+    def 생성(self):
+        첫째, 둘째 = self.번호(&quot;본문 ①&quot;), self.번호(&quot;본문 ②&quot;)
+        if 첫째 == 둘째:
+            messagebox.showwarning(&quot;중복 선택&quot;, &quot;본문 멘트 ①과 ②는 서로 다른 번호를 선택해야 합니다.&quot;)
+            return
+        문장들 = [시작_멘트[self.번호(&quot;시작&quot;)], 본문_멘트[첫째],
+                 본문_멘트[둘째], 마무리_멘트[self.번호(&quot;마무리&quot;)]]
+        전체 = &quot; &quot;.join(문장들)
+        self.결과.delete(&quot;1.0&quot;, &quot;end&quot;)
+        self.결과.insert(&quot;1.0&quot;, 전체)
+        self.상태.config(text=f&quot;생성 완료 · 공백 포함 {len(전체)}자 / 공백 제외 {len(&#x27;&#x27;.join(전체.split()))}자&quot;)
+
+    def 복사(self):
+        내용 = self.결과.get(&quot;1.0&quot;, &quot;end-1c&quot;).strip()
+        if not 내용:
+            messagebox.showinfo(&quot;안내&quot;, &quot;먼저 문장을 생성하세요.&quot;)
+            return
+        self.창.clipboard_clear()
+        self.창.clipboard_append(내용)
+        messagebox.showinfo(&quot;복사 완료&quot;, &quot;결과를 클립보드에 복사했습니다.&quot;)
+
+    def 저장(self):
+        내용 = self.결과.get(&quot;1.0&quot;, &quot;end-1c&quot;).strip()
+        if not 내용:
+            messagebox.showinfo(&quot;안내&quot;, &quot;먼저 문장을 생성하세요.&quot;)
+            return
+        경로 = filedialog.asksaveasfilename(defaultextension=&quot;.txt&quot;, filetypes=[(&quot;텍스트&quot;, &quot;*.txt&quot;)],
+            initialfile=f&quot;인공지능기초_과세특_{datetime.now():%Y%m%d_%H%M%S}.txt&quot;)
+        if 경로:
+            with open(경로, &quot;w&quot;, encoding=&quot;utf-8-sig&quot;) as 파일:
+                파일.write(내용)
+            messagebox.showinfo(&quot;저장 완료&quot;, f&quot;저장했습니다.\n{경로}&quot;)
+
+    def 초기화(self):
+        self.결과.delete(&quot;1.0&quot;, &quot;end&quot;)
+        self.상태.config(text=&quot;초기화되었습니다.&quot;)
+
+if __name__ == &quot;__main__&quot;:
+    창 = tk.Tk()
+    앱 = 과세특_조합기(창)
+    창.mainloop()
+</pre></section></main><script>async function copyCode(){let t=document.getElementById('code').textContent;try{await navigator.clipboard.writeText(t);document.getElementById('msg').textContent='복사 완료';}catch(e){let r=document.createRange();r.selectNodeContents(document.getElementById('code'));getSelection().removeAllRanges();getSelection().addRange(r);document.getElementById('msg').textContent='코드를 선택했습니다. Ctrl+C를 누르세요.';}}</script></body></html>
